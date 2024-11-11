@@ -1,0 +1,33 @@
+name: Nightly Release
+
+on:
+  schedule:
+    - cron: "0 0 * * *"  # every day at 00:00 UTC
+  workflow_dispatch: # allow manual trigger
+
+jobs:
+  nightly:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: build-nightly
+      cancel-in-progress: true
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build .deb file for Debian
+        run: |
+          git clone https://github.com/aws/aws-ec2-instance-connect-config.git
+          cd aws-ec2-instance-connect-config && sed -i '1i\ec2-instance-connect (1.1.nightly) xenial; urgency=high' debian/changelog
+          make docker-build-deb
+
+      - name: Deploy nightly release
+        uses: IsaacShelton/update-existing-release@v1.3.4
+        with:
+          token: ${{secrets.RELEASE_TOKEN}}
+          release: "nightly"
+          tag: "nightly"
+          replace: true
+          files: >
+            ./install.sh
+            ./aws-ec2-instance-connect-config/out/ec2-instance-connect_1.1.nightly_all.deb
