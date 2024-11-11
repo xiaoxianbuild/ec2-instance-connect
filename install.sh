@@ -15,12 +15,12 @@ unset PASS_OS_CHECK
 
 # https://docs.aws.amazon.com/systems-manager/latest/userguide/agent-install-deb.html
 echo "installing aws ssm..."
-curl -o /tmp/amazon-ssm-agent.deb https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/debian_amd64/amazon-ssm-agent.deb
+curl -sSLo /tmp/amazon-ssm-agent.deb https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/debian_amd64/amazon-ssm-agent.deb
 sudo dpkg -i /tmp/amazon-ssm-agent.deb
 sudo systemctl status amazon-ssm-agent
 sudo systemctl enable --now amazon-ssm-agent
 
 echo "installing aws ec2-instance-connect..."
 echo "not implemented now"
-curl -o /tmp/ec2-instance-connect_1.1.nightly_all.deb https://github.com/xiaoxianbuild/ec2-instance-connect/releases/download/nightly/ec2-instance-connect_1.1.nightly_all.deb
+curl -sSLo /tmp/ec2-instance-connect_1.1.nightly_all.deb https://github.com/xiaoxianbuild/ec2-instance-connect/releases/download/nightly/ec2-instance-connect_1.1.nightly_all.deb
 sudo dpkg -i /tmp/ec2-instance-connect_1.1.nightly_all.deb
